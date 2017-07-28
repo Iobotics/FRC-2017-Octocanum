@@ -1,21 +1,24 @@
 package org.usfirst.frc.team2438.robot.commands;
 
 /**
- * @author darrenk1801
+ * @author iobotics
  */
-public class OctoPodDrive extends CommandBase {
-
-    public OctoPodDrive() {
-    	this.requires(pod);
+public class OperateTankDrive extends CommandBase {
+    
+    public OperateTankDrive() {
+        requires(drivetrain);
     }
 
-    protected void initialize() { }
+    // Called just before this Command runs the first time
+    protected void initialize() {
+    }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	double power = -oi.getLeftStick().getY();
-    	
-    	pod.drivePod(power);
+        double left = -oi.getLeftStick().getY();
+        double right = -oi.getRightStick().getY();
+        
+        drivetrain.setTank(left, right);
     }
 
     // Make this return true when this Command no longer needs to run execute()
@@ -24,11 +27,11 @@ public class OctoPodDrive extends CommandBase {
     }
 
     // Called once after isFinished returns true
-    protected void end() { }
+    protected void end() {
+    }
 
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     protected void interrupted() {
-    	this.end();
     }
 }

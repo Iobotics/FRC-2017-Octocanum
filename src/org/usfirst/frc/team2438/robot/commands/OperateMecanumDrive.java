@@ -1,24 +1,26 @@
 package org.usfirst.frc.team2438.robot.commands;
 
-/**
- *
- */
-public class ActuatePod extends CommandBase {
-
-    public ActuatePod() {
-        this.requires(pod);
+public class OperateMecanumDrive extends CommandBase {
+	public OperateMecanumDrive() {
+        requires(drivetrain);
     }
-    
-    protected void initialize() { }
+
+    // Called just before this Command runs the first time
+    protected void initialize() {
+    }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	pod.actuate();
+    	double mag = oi.getRightStick().getMagnitude();
+        double dir = oi.getRightStick().getDirectionDegrees();
+        double rot = oi.getLeftStick().getX();
+        
+        drivetrain.setMecanum(mag, dir, rot);
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return true;
+        return false;
     }
 
     // Called once after isFinished returns true
@@ -28,6 +30,5 @@ public class ActuatePod extends CommandBase {
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     protected void interrupted() {
-    	this.end();
     }
 }

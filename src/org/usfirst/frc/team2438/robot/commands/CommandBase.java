@@ -1,7 +1,7 @@
 package org.usfirst.frc.team2438.robot.commands;
 
 import org.usfirst.frc.team2438.robot.OI;
-import org.usfirst.frc.team2438.robot.subsystems.OctoPod;
+import org.usfirst.frc.team2438.robot.subsystems.*;
 
 import edu.wpi.first.wpilibj.command.Command;
 
@@ -15,7 +15,7 @@ public abstract class CommandBase extends Command {
 	
 	public static OI oi;
 	
-	public static final OctoPod pod = new OctoPod();
+	public static final Drivetrain drivetrain = new Drivetrain();
 
 	public static void init() {
         // This MUST be here. If the OI creates Commands (which it very likely
@@ -26,7 +26,7 @@ public abstract class CommandBase extends Command {
         oi = new OI();
 
         // Show what command your subsystem is running on the SmartDashboard
-        pod.init();
+        drivetrain.init();
     }
 
     public CommandBase(String name) {
