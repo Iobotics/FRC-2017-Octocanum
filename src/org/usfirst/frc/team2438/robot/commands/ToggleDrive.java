@@ -17,30 +17,7 @@ public class ToggleDrive extends CommandBase {
     }
 
     // Called repeatedly when this Command is scheduled to run
-    protected void execute() {
-        /*if(drivetrain.isDriveMecanum()) {
-            double mag = oi.getRightStick().getMagnitude();
-            double dir = oi.getRightStick().getDirectionDegrees();
-            double rot = oi.getLeftStick().getX();
-            //PowerScaler scale = oi.getDriveScaler();
-            if(scale != null) {
-                mag = scale.get(mag);
-                rot = scale.get(rot);
-            } if(Math.abs(mag) < DEADBAND) { mag = 0.0; }
-            if(Math.abs(rot) < DEADBAND) { rot = 0.0; }
-        
-            //System.out.println(mag + " , " + dir + " , " + rot);
-            //System.out.println("LR: " + drivetrain.getLeftRearEncoder() + ", RR: " + drivetrain.getRightRearEncoder());
-            //drivetrain.debug();
-        
-            drivetrain.setMecanum(mag, dir, rot);
-        } else {
-            double left = -oi.getLeftStick().getY();
-            double right = -oi.getRightStick().getY();
-        
-            drivetrain.setTank(left, right);
-        }*/
-    }
+    protected void execute() { }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {

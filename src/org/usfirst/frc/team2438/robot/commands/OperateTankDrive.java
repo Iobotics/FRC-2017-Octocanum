@@ -1,5 +1,7 @@
 package org.usfirst.frc.team2438.robot.commands;
 
+import edu.wpi.first.wpilibj.GenericHID;
+
 /**
  * @author iobotics
  */
@@ -15,8 +17,8 @@ public class OperateTankDrive extends CommandBase {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-        double left = -oi.getLeftStick().getY();
-        double right = -oi.getRightStick().getY();
+        double left = -oi.getY(GenericHID.Hand.kLeft);
+        double right = -oi.getY(GenericHID.Hand.kRight);
         
         drivetrain.setTank(left, right);
     }

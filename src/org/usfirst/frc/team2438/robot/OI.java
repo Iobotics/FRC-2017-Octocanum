@@ -1,28 +1,36 @@
 package org.usfirst.frc.team2438.robot;
 
-import org.usfirst.frc.team2438.robot.commands.*;
+import org.usfirst.frc.team2438.robot.commands.ToggleDrive;
 
-import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 
 public class OI {
 	// joysticks //
-    private final Joystick _lStick = new Joystick(1);
-    private final Joystick _rStick = new Joystick(2);
+    private final XboxController _gamepad = new XboxController(1);
     
     // buttons //
-    private final Button _actuateButton = new JoystickButton(_rStick, 3);
+    private final Button _actuateButton = new JoystickButton(_gamepad, 2);
 
 	public OI() {
 		_actuateButton.whenPressed(new ToggleDrive());
 	}
     
-    public Joystick getLeftStick()  {
-        return _lStick;
+	public double getX(GenericHID.Hand hand)  {
+        return _gamepad.getX(hand);
+    }
+	
+	public double getY(GenericHID.Hand hand)  {
+        return _gamepad.getY(hand);
     }
     
-    public Joystick getRightStick()  {
-        return _rStick;
+    public double getMagnitude(GenericHID.Hand hand) {
+    	return Math.sqrt(Math.pow(getX(hand), 2) + Math.pow(getY(hand), 2));
+    }
+    
+    public double getDirectionDegrees(GenericHID.Hand hand) {
+    	return Math.toDegrees(Math.atan2(getX(hand), -getY(hand)));
     }
 }
