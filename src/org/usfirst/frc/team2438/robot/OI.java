@@ -19,11 +19,11 @@ public class OI {
 	}
     
 	public double getX(GenericHID.Hand hand)  {
-        return _gamepad.getX(hand);
+        return -_gamepad.getX(hand);
     }
 	
 	public double getY(GenericHID.Hand hand)  {
-        return _gamepad.getY(hand);
+        return -_gamepad.getY(hand);
     }
     
     public double getMagnitude(GenericHID.Hand hand) {

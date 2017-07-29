@@ -34,25 +34,21 @@ public class Drivetrain extends Subsystem {
     
     public void init() {
     	_frontLeftMain = new CANTalon(RobotMap.frontLeftMain);
-		_frontLeftMain.setInverted(true);
 		_frontLeftSlave = new CANTalon(RobotMap.frontLeftSlave);
 		_frontLeftSlave.changeControlMode(TalonControlMode.Follower);
 		_frontLeftSlave.set(_frontLeftMain.getDeviceID());
 
 		_frontRightMain = new CANTalon(RobotMap.frontRightMain);
-		_frontRightMain.setInverted(true);
 		_frontRightSlave = new CANTalon(RobotMap.frontRightSlave);
 		_frontRightSlave.changeControlMode(TalonControlMode.Follower);
 		_frontRightSlave.set(_frontRightMain.getDeviceID());
 
 		_backLeftMain = new CANTalon(RobotMap.backLeftMain);
-		_backLeftMain.setInverted(true);
 		_backLeftSlave = new CANTalon(RobotMap.backLeftSlave);
 		_backLeftSlave.changeControlMode(TalonControlMode.Follower);
 		_backLeftSlave.set(_backLeftMain.getDeviceID());
 		
 		_backRightMain = new CANTalon(RobotMap.backRightMain);
-		_backRightMain.setInverted(true);
 		_backRightSlave = new CANTalon(RobotMap.backRightSlave);
 		_backRightSlave.changeControlMode(TalonControlMode.Follower);
 		_backRightSlave.set(_backRightMain.getDeviceID());
