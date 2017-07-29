@@ -13,9 +13,9 @@ public class OperateMecanumDrive extends CommandBase {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	double mag = oi.getMagnitude(GenericHID.Hand.kRight);
+    	double mag = oi.getX(GenericHID.Hand.kLeft);
         double dir = oi.getDirectionDegrees(GenericHID.Hand.kRight);
-        double rot = oi.getX(GenericHID.Hand.kLeft);
+        double rot = oi.getMagnitude(GenericHID.Hand.kRight);
         
         drivetrain.setMecanum(mag, dir, rot);
     }
