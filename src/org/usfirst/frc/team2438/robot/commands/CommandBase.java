@@ -15,7 +15,8 @@ public abstract class CommandBase extends Command {
 	
 	public static OI oi;
 	
-	public static final Drivetrain drivetrain = new Drivetrain();
+	public static final Drivetrain 		 drivetrain = new Drivetrain();
+	public static final NavigationSensor navsensor  = new NavigationSensor();
 
 	public static void init() {
         // This MUST be here. If the OI creates Commands (which it very likely
@@ -27,6 +28,7 @@ public abstract class CommandBase extends Command {
 
         // Show what command your subsystem is running on the SmartDashboard
         drivetrain.init();
+        navsensor.init();
     }
 
     public CommandBase(String name) {

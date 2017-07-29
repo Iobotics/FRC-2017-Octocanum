@@ -69,8 +69,8 @@ public class Drivetrain extends Subsystem {
         _drive.tankDrive(left, right);
     }
     
-    public void setMecanum(double mag, double dir, double rot) {
-        _drive.mecanumDrive_Polar(mag, dir, rot);
+    public void setMecanum(double x, double y, double rot, double gyro) {
+        _drive.mecanumDrive_Cartesian(x, y, rot, gyro);
     }
     
     public void setPneumaticDriveSwitch(boolean mecanum) {

@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.GenericHID;
 public class OperateMecanumDrive extends CommandBase {
 	public OperateMecanumDrive() {
         requires(drivetrain);
+        requires(navsensor);
     }
 
     // Called just before this Command runs the first time
@@ -13,11 +14,12 @@ public class OperateMecanumDrive extends CommandBase {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	double mag = oi.getX(GenericHID.Hand.kLeft);
-        double dir = oi.getDirectionDegrees(GenericHID.Hand.kRight);
-        double rot = oi.getMagnitude(GenericHID.Hand.kRight);
+    	double x = oi.getX(GenericHID.Hand.kRight);
+        double y = oi.getY(GenericHID.Hand.kRight);
+        double rot = oi.getX(GenericHID.Hand.kLeft);
+        double gyro = navsensor.getGyro();
         
-        drivetrain.setMecanum(mag, dir, rot);
+        drivetrain.setMecanum(x, y, rot, gyro);
     }
 
     // Make this return true when this Command no longer needs to run execute()
