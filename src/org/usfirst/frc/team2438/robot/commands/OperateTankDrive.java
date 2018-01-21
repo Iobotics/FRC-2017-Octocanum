@@ -17,8 +17,8 @@ public class OperateTankDrive extends CommandBase {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-        double left = -oi.getY(GenericHID.Hand.kLeft);
-        double right = -oi.getY(GenericHID.Hand.kRight);
+        double left = oi.getY(GenericHID.Hand.kLeft);
+        double right = oi.getY(GenericHID.Hand.kRight);
         
         drivetrain.setTank(left, right);
     }

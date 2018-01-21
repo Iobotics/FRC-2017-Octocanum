@@ -1,98 +1,119 @@
 package org.usfirst.frc.team2438.robot.subsystems;
 
+import org.usfirst.frc.team2438.robot.RobotMap;
 import org.usfirst.frc.team2438.robot.commands.OperateMecanumDrive;
 import org.usfirst.frc.team2438.robot.commands.OperateTankDrive;
 
-import com.ctre.CANTalon;
-import com.ctre.CANTalon.TalonControlMode;
-
-import org.usfirst.frc.team2438.robot.RobotMap;
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.drive.RobotDriveBase.MotorType;
+import edu.wpi.first.wpilibj.drive.Vector2d;
 
 /**
  * @author iobotics
  */
 public class Drivetrain extends Subsystem {
-    private CANTalon _frontLeftMain;
-	private CANTalon _frontLeftSlave;
-	private CANTalon _frontRightMain;
-	private CANTalon _frontRightSlave;
-	
-	private CANTalon _backLeftMain;
-	private CANTalon _backLeftSlave;
-	private CANTalon _backRightMain;
-	private CANTalon _backRightSlave;
-    
-    private DoubleSolenoid _solenoid;
-    
-    private RobotDrive _drive;
-    
-    private boolean mecanumActivated;
-    
-    public void init() {
-    	_frontLeftMain = new CANTalon(RobotMap.frontLeftMain);
-		_frontLeftSlave = new CANTalon(RobotMap.frontLeftSlave);
-		_frontLeftSlave.changeControlMode(TalonControlMode.Follower);
-		_frontLeftSlave.set(_frontLeftMain.getDeviceID());
+	private TalonSRX _frontLeftMain;
+	private TalonSRX _frontLeftSlave;
+	private TalonSRX _frontRightMain;
+	private TalonSRX _frontRightSlave;
 
-		_frontRightMain = new CANTalon(RobotMap.frontRightMain);
-		_frontRightSlave = new CANTalon(RobotMap.frontRightSlave);
-		_frontRightSlave.changeControlMode(TalonControlMode.Follower);
-		_frontRightSlave.set(_frontRightMain.getDeviceID());
+	private TalonSRX _backLeftMain;
+	private TalonSRX _backLeftSlave;
+	private TalonSRX _backRightMain;
+	private TalonSRX _backRightSlave;
 
-		_backLeftMain = new CANTalon(RobotMap.backLeftMain);
-		_backLeftSlave = new CANTalon(RobotMap.backLeftSlave);
-		_backLeftSlave.changeControlMode(TalonControlMode.Follower);
-		_backLeftSlave.set(_backLeftMain.getDeviceID());
-		
-		_backRightMain = new CANTalon(RobotMap.backRightMain);
-		_backRightSlave = new CANTalon(RobotMap.backRightSlave);
-		_backRightSlave.changeControlMode(TalonControlMode.Follower);
-		_backRightSlave.set(_backRightMain.getDeviceID());
-		
+	private DoubleSolenoid _solenoid;
+
+	private boolean mecanumActivated;
+
+	public void init() {
+		_frontLeftMain = new TalonSRX(RobotMap.frontLeftMain);
+		_frontLeftSlave = new TalonSRX(RobotMap.frontLeftSlave);
+		_frontLeftSlave.follow(_frontLeftMain);
+
+		_frontRightMain = new TalonSRX(RobotMap.frontRightMain);
+		_frontRightSlave = new TalonSRX(RobotMap.frontRightSlave);
+		_frontRightSlave.follow(_frontRightMain);
+
+		_backLeftMain = new TalonSRX(RobotMap.backLeftMain);
+		_backLeftSlave = new TalonSRX(RobotMap.backLeftSlave);
+		_backLeftSlave.follow(_backLeftMain);
+
+		_backRightMain = new TalonSRX(RobotMap.backRightMain);
+		_backRightSlave = new TalonSRX(RobotMap.backRightSlave);
+		_backRightSlave.follow(_backRightMain);
+
 		_solenoid = new DoubleSolenoid(RobotMap.solenoidMain, RobotMap.solenoidSlave);
-        
-        _drive = new RobotDrive(_frontLeftMain, _backLeftMain, _frontRightMain, _backRightMain);
-        _drive.setSafetyEnabled(false);
-        
-        mecanumActivated = false;
-    }        
-    
-    public void setTank(double left, double right) {
-        _drive.tankDrive(left, right);
-    }
-    
-    public void setMecanum(double x, double y, double rot, double gyro) {
-        _drive.mecanumDrive_Cartesian(x, y, rot, gyro);
-    }
-    
-    public void setPneumaticDriveSwitch(boolean mecanum) {
-        if(mecanum) {
-        	_solenoid.set(DoubleSolenoid.Value.kForward);
-        	setDefaultCommand(new OperateMecanumDrive());
-        }
-        else {
-        	_solenoid.set(DoubleSolenoid.Value.kReverse);
-        	setDefaultCommand(new OperateTankDrive());
-        }
-        try {
+
+		mecanumActivated = false;
+	}
+
+	public void setTank(double left, double right) {
+		left = Math.copySign(left * left, left);
+		right = Math.copySign(right * right, right);
+
+		_frontLeftMain.set(ControlMode.PercentOutput, -left);
+		_backLeftMain.set(ControlMode.PercentOutput, -left);
+		_frontRightMain.set(ControlMode.PercentOutput, right);
+		_backRightMain.set(ControlMode.PercentOutput, right);
+	}
+
+	public void setMecanum(double x, double y, double rot, double gyro) {		
+		Vector2d input = new Vector2d(y, x);
+	    input.rotate(-gyro);
+
+	    double[] wheelSpeeds = new double[4];
+	    wheelSpeeds[MotorType.kFrontLeft.value]  = input.x + input.y + rot;
+	    wheelSpeeds[MotorType.kFrontRight.value] = input.x - input.y + rot;
+	    wheelSpeeds[MotorType.kRearLeft.value]   = -input.x + input.y + rot;
+	    wheelSpeeds[MotorType.kRearRight.value]  = -input.x - input.y + rot;
+
+	    double maxMagnitude = Math.abs(wheelSpeeds[0]);
+	    for (int i = 1; i < wheelSpeeds.length; i++) {
+	      double temp = Math.abs(wheelSpeeds[i]);
+	      if (maxMagnitude < temp) {
+	        maxMagnitude = temp;
+	      }
+	    }
+	    if (maxMagnitude > 1.0) {
+	      for (int i = 0; i < wheelSpeeds.length; i++) {
+	        wheelSpeeds[i] = wheelSpeeds[i] / maxMagnitude;
+	      }
+	    }
+
+	    _frontLeftMain.set(ControlMode.PercentOutput, wheelSpeeds[MotorType.kFrontLeft.value]);
+	    _frontRightMain.set(ControlMode.PercentOutput, wheelSpeeds[MotorType.kFrontRight.value]);
+	    _backLeftMain.set(ControlMode.PercentOutput, wheelSpeeds[MotorType.kRearLeft.value]);
+	    _backRightMain.set(ControlMode.PercentOutput, wheelSpeeds[MotorType.kRearRight.value]);
+	}
+
+	public void setPneumaticDriveSwitch(boolean mecanum) {
+		if (mecanum) {
+			_solenoid.set(DoubleSolenoid.Value.kForward);
+			setDefaultCommand(new OperateMecanumDrive());
+		} else {
+			_solenoid.set(DoubleSolenoid.Value.kReverse);
+			setDefaultCommand(new OperateTankDrive());
+		}
+		try {
 			Thread.sleep(500);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-        _solenoid.set(DoubleSolenoid.Value.kOff);
-        
-        mecanumActivated = !mecanumActivated;
-    }
-    
-    public boolean isDriveMecanum() {
-        return mecanumActivated;
-    }
-    
-    public void initDefaultCommand() {
-        setDefaultCommand(new OperateTankDrive());
-    }
+		_solenoid.set(DoubleSolenoid.Value.kOff);
+
+		mecanumActivated = !mecanumActivated;
+	}
+
+	public boolean isDriveMecanum() {
+		return mecanumActivated;
+	}
+
+	public void initDefaultCommand() {
+		setDefaultCommand(new OperateTankDrive());
+	}
 }
