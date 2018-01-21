@@ -13,6 +13,7 @@ public class OI {
     
     // buttons //
     private final Button _actuateButton = new JoystickButton(_gamepad, 2);
+    //private final Button _kiddieButton = new JoystickButton(_gamepad, 8);
 
 	public OI() {
 		_actuateButton.whenPressed(new ToggleDrive());

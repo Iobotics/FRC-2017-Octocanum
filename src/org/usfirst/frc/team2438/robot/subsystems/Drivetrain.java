@@ -116,4 +116,9 @@ public class Drivetrain extends Subsystem {
 	public void initDefaultCommand() {
 		setDefaultCommand(new OperateTankDrive());
 	}
+
+	public boolean isKiddie() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }

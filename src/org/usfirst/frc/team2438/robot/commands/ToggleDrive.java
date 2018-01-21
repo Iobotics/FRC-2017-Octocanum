@@ -5,15 +5,15 @@ package org.usfirst.frc.team2438.robot.commands;
  */
 public class ToggleDrive extends CommandBase {
     
-    //private static final double DEADBAND = 0.05;
-    
     public ToggleDrive() {
         requires(drivetrain);
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
-        drivetrain.setPneumaticDriveSwitch(!drivetrain.isDriveMecanum());
+    	boolean isMecanum = drivetrain.isDriveMecanum();
+    	
+    	drivetrain.setPneumaticDriveSwitch(!isMecanum);
     }
 
     // Called repeatedly when this Command is scheduled to run
